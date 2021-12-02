@@ -28,7 +28,7 @@ $(document).ready(function () {
 	$('#id_check').click(function() {
 		var user_id = $('#user_id').val();
 		
-		if(user_id == ""){
+		if(user_id == '') {
 			alert('아이디를 입력하세요.');
 			return;
 		}
@@ -80,7 +80,7 @@ $(document).ready(function () {
 	$('#sendAuthBtn').click(function() {
 		var user_mail = $('#user_mail_modal').val();
 		
-		if(user_mail == ""){
+		if(user_mail == '') {
 			alert('이메일을 입력하세요.');
 			return;
 		}
@@ -114,67 +114,72 @@ $(document).ready(function () {
 		});
 	});
 	
+	// authMailBtn를 가지는 HTML 태그가 클릭되었을 때 실행
 	$('#authMailBtn').click(function(){
 		var user_mail = $('#user_mail_modal').val();
-		var auth_num = $('#auth_num').val();
-	
+		var auth_num  = $('#auth_num').val();
+		
 		$.ajax({
 			type : 'POST',
-			url : './mailAuth',
+			url  : './mailAuth',
 			data : {
 				user_mail : user_mail,
-				auth_num : auth_num
+				auth_num  : auth_num
 			},
 			dataType : 'text',
-			success : function(data){
-				if(data == 0){
+			success : function(data) {
+				if(data == 0) {
 					alert('인증되었습니다.');
-					$('#user_mail').val(user_mail);
+					$('#user_email').val(user_mail);
 					$('#emailAuthModal').modal('hide');
 					em_check_flag = true;
 				}
-				else if(data == 1){
+				else if(data == 1) {
 					alert('인증번호가 다릅니다.');
 					$('#auth_num').val('');
 				}
-				else if(data == -1){
+				else if(data == -1) {
 					alert('데이터베이스 오류가 발생했습니다.');
-					$('#auth_num').val('');	
+					$('#auth_num').val('');
 				}
 			}
 		});
-	
+		
 	});
 	
+	// form 태그가 sumbit 이벤트를 발생시켰을 때
 	$('form').submit(function(event){
-		var user_id = $('#user_id').val();
-		var user_pw = $('#user_pw').val();
-		var user_pw2 = $('#user_pw2').val();
-		var user_name = $('#user_name').val();
+		var user_id     = $('#user_id').val();
+		var user_pw     = $('#user_pw').val();
+		var user_pw2    = $('#user_pw2').val();
+		var user_name   = $('#user_name').val();
 		var user_gender = $('#user_gender').val();
-		var user_email = $('#user_email').val();
-		var addr1 = $('#addr1').val();
-		var addr2 = $('#addr2').val();
-		var addr3 = $('#addr3').val();
+		var user_email  = $('#user_email').val();
+		var addr1  = $('#user_addr1').val();
+		var addr2  = $('#user_addr2').val();
+		var addr3  = $('#user_addr3').val();
 		
 		if(user_id == "" || user_pw == "" || user_pw2 == "" ||
-				user_name == "" || user_gender == "" || user_mail == "" ||
-				user_addr1 == "" || user_addr2 == "" || user_addr3 == "" ||){
-			alert('모든값을 입력하세요.');
+				user_name == "" || user_gender == "" || user_email == "" ||
+				addr1 == "" || addr2 == "" || addr3 == "") {
+			alert('모든 값을 입력하세요.');
 			event.preventDefault();
 			return;
 		}
 		
-		if(!id_check_flag) {
+		if(!id_check_flag) { 
 			alert('아이디 중복체크를 해주세요.');
+			event.preventDefault();
 			return;
 		}
 		if(!pw_check_flag) {
 			alert('비밀번호를 확인해주세요.');
+			event.preventDefault();
 			return;
 		}
 		if(!em_check_flag) {
 			alert('이메일 인증을 해주세요.');
+			event.preventDefault();
 			return;
 		}
 		

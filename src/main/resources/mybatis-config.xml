@@ -3,5 +3,12 @@
    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-
+	<typeAliases>
+  		<typeAlias alias="Users" type="com.bbs.vo.Users"/>
+  		<typeAlias alias="Authmail" type="com.bbs.vo.Authmail"/>
+  		<typeAlias alias="Boarder" type="com.bbs.vo.Boarder"/>
+  		<typeAlias alias="Reply" type="com.bbs.vo.Reply"/>
+  		<typeAlias alias="UploadFile" type="com.bbs.vo.UploadFile"/>
+  		<typeAlias alias="Likey_R" type="com.bbs.vo.Likey_R"/>
+	</typeAliases>
 </configuration>

@@ -11,4 +11,115 @@
 		WHERE user_id = #{user_id}
 	</select>
 	
+	<!-- 이메일 인증번호 저장 SQL -->
+	<insert id="setAuthnum">
+		INSERT INTO AUTHMAIL
+		VALUES (#{user_mail},#{auth_num})
+	</insert>
+	
+	<!-- 이메일 인증번호 불러오기 SQL -->
+	<select id="getAuthnum" resultType="int">
+		SELECT auth_num
+		FROM AUTHMAIL
+		WHERE user_mail = #{user_mail}
+	</select>
+	
+	<!-- 이메일 인증번호 수정하기 SQL -->
+	<update id="resetAuthnum">
+		UPDATE AUTHMAIL
+		SET auth_num = #{auth_num}
+		WHERE user_mail = #{user_mail}
+	</update>
+	
+	<!-- 이메일 인증번호 삭제 SQL -->
+	<delete id="deleteAuthmail">
+		DELETE FROM AUTHMAIL
+		WHERE user_mail = #{user_mail}
+	</delete>
+	
+	<!-- 회원가입 SQL -->
+	<insert id="join">
+		INSERT INTO USERS
+		VALUES(#{user_id},#{user_pw},#{user_name},#{user_gender},#{user_email},#{user_addr})
+	</insert>
+	
+	<!-- 로그인 SQL -->
+	<select id="login" resultType="Users">
+		SELECT *
+		FROM USERS
+		WHERE user_id = #{user_id} AND user_pw = #{user_pw}
+	</select>
+	
+	<!-- 게시글 작성 SQL -->
+	<insert id="write">
+		INSERT INTO boarder(writer, title, contents, reg_date, likey, available)
+		VALUES(#{writer}, #{title}, #{contents}, now(), 0, 0)
+		<selectKey keyProperty="boarder_id" resultType="_int" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<!-- 파일 업로드 SQL -->
+	<insert id="fileUpload">
+		INSERT INTO uploadFile(boarder_id, file_name, file_realName, count)
+		VALUES(#{boarder_id}, #{file_name}, #{file_realName}, 0)
+	</insert>
+	
+	<!-- 게시물 불러오기 SQL -->
+	<select id="getBoarder" parameterType="int" resultType="Boarder">
+		SELECT * 
+		FROM BOARDER
+		WHERE boarder_id = #{boarder_id} AND available = 0
+	</select>
+	
+	<!-- 첨부파일 불러오기 SQL -->
+	<select id="getUploadFile" resultType="UploadFile">
+		SELECT *
+		FROM UPLOADFILE
+		WHERE boarder_id = #{boarder_id}
+	</select>
+	
+	<!-- 첨부파일 불러오기 SQL -->
+	<select id="getUploadFileReal" resultType="UploadFile">
+		SELECT *
+		FROM UPLOADFILE
+		WHERE file_realName = #{file_realName}
+	</select>
+	
+	<!-- 게시물 수정 SQL -->
+	<update id="updateBoarder">
+		UPDATE BOARDER
+		SET    title = #{title}, contents = #{contents}
+		WHERE  boarder_id = #{boarder_id}
+	</update>
+	
+	<!-- 업로드 파일 수정 SQL -->
+	<update id="updateFile">
+		UPDATE UPLOADFILE
+		SET    file_name = #{file_name}, file_realName = #{file_realName}
+		WHERE  boarder_id = #{boarder_id}
+	</update>
+	
+	<!-- 게시글 최댓값 검색 SQL -->
+	<select id="getMaxBoarder_id" resultType="_int">
+		SELECT IFNULL(MAX(boarder_id), 0)
+		FROM BOARDER
+	</select>
+	
+	<!-- 게시글 리스트 10개 검색 SQL -->
+	<select id="getBbsList" resultType="Boarder">
+		SELECT *
+		FROM BOARDER
+		WHERE boarder_id <![CDATA[<=]]> #{boarder_id} AND available = 0
+		ORDER BY boarder_id DESC
+		LIMIT 10
+	</select>
+	
+	<!-- 게시글 삭제처리 SQL -->
+	<update id="deleteBoarder">
+		UPDATE BOARDER
+		SET available = 1
+		WHERE boarder_id = #{boarder_id}
+	</update>
+	
 </mapper>
